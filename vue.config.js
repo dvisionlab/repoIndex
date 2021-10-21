@@ -5,5 +5,5 @@ module.exports = {
     }
   },
   outputDir: "./docs/",
-  publicPath: process.env.NODE_ENV === "production" ? "/repoIndex/" : "/"
+  publicPath: process.env.NODE_ENV === "production" ? "/docs/" : "/"
 };
