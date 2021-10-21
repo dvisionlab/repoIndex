@@ -4,5 +4,6 @@ module.exports = {
       open: true
     }
   },
-  outputDir: "./docs/"
+  outputDir: "./docs/",
+  publicPath: process.env.NODE_ENV === "production" ? "/repoIndex/" : "/"
 };
