@@ -14,6 +14,7 @@ const getFromLocalStorage = function (key: string): object | null {
 };
 
 const setInLocalStorage = function (key: string, payload: object): void {
+  console.log("payload", payload);
   localStorage.setItem("repoIndex", JSON.stringify(payload));
   return;
 };

@@ -10,24 +10,24 @@ import "@mdi/font/css/materialdesignicons.css";
 
 Vue.use(Vuetify);
 
-import colors from 'vuetify/lib/util/colors'
+import colors from "vuetify/lib/util/colors";
 
 const vuetify = new Vuetify({
   theme: {
-    dark:true,
+    dark: true,
     themes: {
       light: {
         primary: colors.purple,
         secondary: colors.grey.darken1,
         accent: colors.shades.black,
-        error: colors.red.accent3,
+        error: colors.red.accent3
       },
       dark: {
-        primary: colors.blue.lighten1,
-      },
-    },
-  },
-})
+        primary: colors.blue.lighten1
+      }
+    }
+  }
+});
 
 Vue.config.productionTip = false;
 
@@ -36,5 +36,5 @@ new Vue({
   store,
   vuetify,
   // vuetify: new Vuetify(),
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");
