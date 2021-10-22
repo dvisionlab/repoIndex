@@ -13,6 +13,7 @@
         </v-btn>
       </v-toolbar>
 
+      <!-- v-model="item.active" -->
       <v-list>
         <v-list-group
           v-for="item in items"
@@ -20,6 +21,7 @@
           v-model="item.active"
           :prepend-icon="item.action"
           no-action
+          multiple
         >
           <template v-slot:activator>
             <v-list-item-content>
@@ -66,53 +68,34 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { repos } from "@/ts/config";
+import { savePreferences } from "@/ts/utils";
 
 export default Vue.extend({
   data: () => ({
-    items: [
-      {
-        action: "mdi-ticket",
-        items: [{ title: "List Item", link: "" }],
-        title: "Active Customers Projects",
-        active: true
-      },
-      {
-        action: "mdi-silverware-fork-knife",
-        items: [
-          { title: "Breakfast & brunch" },
-          { title: "New American" },
-          { title: "Sushi" }
-        ],
-        title: "Closed Customers Projects"
-      },
-      {
-        action: "mdi-school",
-        items: [
-          {
-            title: "Larvitar",
-            subtitle: "ciccio",
-            link: "https://github.com/dvisionlab/Larvitar"
-          }
-        ],
-        title: "OpenSource Libraries"
-      },
-      {
-        action: "mdi-run",
-        items: [{ title: "List Item" }],
-        title: "Internal Tools"
-      },
-      {
-        action: "mdi-bottle-tonic-plus",
-        items: [{ title: "List Item" }],
-        title: "Misc"
-      }
-    ]
+    items: repos,
+    opened: [true, false, true, false, false]
   }),
+  // computed: {
+  //   opened(): Array<boolean | undefined> {
+  //     return this.items.map(i => i.active);
+  //   }
+  // },
   methods: {
     openLink(url: string): void {
-      console.log(url);
+      console.log("open", url);
       window.open(url, "_blank");
+    },
+    save(): void {
+      console.log(this.opened);
+      savePreferences({});
     }
+  },
+  watch: {
+    // items: function (val) {
+    //   console.log(val);
+    //   console.log(val.map(i => i.active));
+    // }
   }
 });
 </script>
