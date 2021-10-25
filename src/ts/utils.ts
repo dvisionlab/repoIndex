@@ -66,23 +66,28 @@ export async function getGroupedRepos() {
   });
 
   const response = await octokit.rest.repos.listForOrg({
-    org
+    org,
+    sort: "pushed",
+    direction: "desc",
+    per_page: 100 // max
   });
 
   const repos: repository[] = response.data.map((repo: any): repository => {
-    repo.icon = "mdi-file-outline";
+    // TODO here...
+    // - group projects based on topics (repo.topics is the array of topics in the repository 'about' section), ie "customer-project", "closed", ecc
+    // - set a proper icon for each repo
+
+    repo.icon = "mdi-open-in-new";
     repo.group = repo.private ? "Private Projects" : "Open Source Libraries";
     return repo;
   });
-
-  console.log(repos);
 
   // lodash-free version of groupBy
   const grouped = repos.reduce(
     (r, v, i, a, k = v.group) => ((r[k] || (r[k] = [])).push(v), r),
     {}
   );
-  console.log(grouped);
+  console.log("grouped", grouped);
 
   let i = 0;
   const items: item[] = [];
@@ -92,13 +97,29 @@ export async function getGroupedRepos() {
       id: ++i,
       group: groupId,
       repos: grouped[groupId],
-      active: false
+      active: false,
+      icon: grouped[groupId][0].private ? "mdi-folder-key" : "mdi-account-group"
     };
 
     items.push(newItem);
-
-    console.log(newItem);
   }
 
   return items;
 }
+
+function words(string, pattern?) {
+  if (pattern === undefined) {
+    // const result = hasUnicodeWord(string) ? unicodeWords(string) : asciiWords(string)
+    const reAsciiWord = /[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;
+    const result = string.match(reAsciiWord);
+    return result || [];
+  }
+  return string.match(pattern) || [];
+}
+
+export const startCase = string =>
+  words(`${string}`.replace(/['\u2019]/g, "")).reduce(
+    // (result, word, index) => result + (index ? " " : "") + upperFirst(word),
+    (result, word, index) => result + (index ? " " : "") + word,
+    ""
+  );

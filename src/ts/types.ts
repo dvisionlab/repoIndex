@@ -10,6 +10,7 @@ export interface item {
   active: boolean;
   repos: object[];
   group: string;
+  icon: string;
 }
 
 export type payload = item[] | {};

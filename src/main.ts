@@ -23,7 +23,10 @@ const vuetify = new Vuetify({
         error: colors.red.accent3
       },
       dark: {
-        primary: colors.blue.lighten1
+        primary: colors.blue.lighten1,
+        secondary: colors.grey.darken3,
+        accent: colors.shades.black,
+        error: colors.red.accent3
       }
     }
   }
