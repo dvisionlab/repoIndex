@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "octokit": "^1.7.0",
     "sass": "^1.43.2",
     "sass-loader": "^12.2.0",
     "vue": "^2.6.11",

@@ -11,3 +11,5 @@ export interface item {
   repos: object[];
   group: string;
 }
+
+export type payload = item[] | {};

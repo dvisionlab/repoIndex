@@ -8,7 +8,10 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon>
+        <v-btn
+          icon
+          href="https://github.com/login/oauth/authorize?=clientId:c13baa4f7103dd91b51f"
+        >
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </v-toolbar>
@@ -65,48 +68,78 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { savePreferences } from "@/ts/utils";
+import { getGroupedRepos, savePreferences, loadPreferences } from "@/ts/utils";
+
+// import { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
+// type UpdateLabelParameters =
+//   RestEndpointMethodTypes["issues"]["updateLabel"]["parameters"];
+
+import { item } from "@/ts/types";
+
+// let items: item[];
 
 export default Vue.extend({
   data: () => ({
-    items: [
-      {
-        id: 1,
-        group: "Ongoing Customer Projects",
-        repos: [{ name: "Muse", icon: "mdi-file-outline" }],
-        active: false
-      },
-      {
-        id: 2,
-        group: "Open Source Libraries",
-        repos: [{ name: "Larvitar", icon: "mdi-file-outline" }],
-        active: false
-      },
-      {
-        id: 3,
-        group: "Internal Tools",
-        repos: [{ name: "Ditto", icon: "mdi-file-outline" }],
-        active: false
-      },
-      {
-        id: 4,
-        group: "Misc",
-        repos: [{ name: "repoIndex", icon: "mdi-file-outline" }],
-        active: false
-      }
-    ]
+    items: [] as item[]
   }),
+  // data: () => ({
+  //   items: [
+  //     {
+  //       id: 1,
+  //       group: "Ongoing Customer Projects",
+  //       repos: [{ name: "Muse", icon: "mdi-file-outline" }],
+  //       active: false
+  //     },
+  //     {
+  //       id: 2,
+  //       group: "Open Source Libraries",
+  //       repos: [{ name: "Larvitar", icon: "mdi-file-outline" }],
+  //       active: false
+  //     },
+  //     {
+  //       id: 3,
+  //       group: "Internal Tools",
+  //       repos: [{ name: "Ditto", icon: "mdi-file-outline" }],
+  //       active: false
+  //     },
+  //     {
+  //       id: 4,
+  //       group: "Misc",
+  //       repos: [{ name: "repoIndex", icon: "mdi-file-outline" }],
+  //       active: false
+  //     }
+  //   ]
+  // }),
   methods: {
     openLink(url: string): void {
       console.log("open", url);
       window.open(url, "_blank");
     },
     save(active: boolean, itemIndex: number): void {
-      let freezed = this.items.slice();
-      !freezed[itemIndex].active;
+      // freeze to avoid conflicts when negating "active"
+      let freezed: item[] = [];
+
+      this.items.forEach(val => {
+        let init: item = {
+          id: 0,
+          group: "",
+          repos: [],
+          active: false
+        };
+
+        let obj = Object.assign(init, val);
+        freezed.push(obj);
+      });
+
+      freezed[itemIndex].active = !freezed[itemIndex].active;
       console.log(freezed);
+
       savePreferences(freezed);
     }
+  },
+  async beforeMount() {
+    let repos = await getGroupedRepos();
+    this.items = loadPreferences(repos);
   }
 });
 </script>
