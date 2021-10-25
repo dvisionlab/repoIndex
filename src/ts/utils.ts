@@ -40,12 +40,6 @@ const getFromLocalStorage = function (key: string): item[] | null {
 };
 
 const setInLocalStorage = function (key: string, payload: payload): void {
-  if (Array.isArray(payload)) {
-    console.log(
-      "payload",
-      payload.map(p => p.active)
-    );
-  }
   localStorage.setItem("repoIndex", JSON.stringify(payload));
   return;
 };

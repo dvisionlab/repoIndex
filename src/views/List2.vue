@@ -52,7 +52,7 @@
                   repo.name
                 }}</v-list-item-title>
                 <v-list-item-subtitle>
-                  last push: {{ new Date(repo.pushed_at).toLocaleString() }}
+                  last push: {{ formatDate(new Date(repo.pushed_at)) }}
                 </v-list-item-subtitle>
                 <v-list-item-icon>
                   <v-icon v-text="repo.icon"></v-icon>
@@ -96,38 +96,23 @@ export default Vue.extend({
   data: () => ({
     items: [] as item[]
   }),
-  // data: () => ({
-  //   items: [
-  //     {
-  //       id: 1,
-  //       group: "Ongoing Customer Projects",
-  //       repos: [{ name: "Muse", icon: "mdi-file-outline" }],
-  //       active: false
-  //     },
-  //     {
-  //       id: 2,
-  //       group: "Open Source Libraries",
-  //       repos: [{ name: "Larvitar", icon: "mdi-file-outline" }],
-  //       active: false
-  //     },
-  //     {
-  //       id: 3,
-  //       group: "Internal Tools",
-  //       repos: [{ name: "Ditto", icon: "mdi-file-outline" }],
-  //       active: false
-  //     },
-  //     {
-  //       id: 4,
-  //       group: "Misc",
-  //       repos: [{ name: "repoIndex", icon: "mdi-file-outline" }],
-  //       active: false
-  //     }
-  //   ]
-  // }),
   methods: {
     openLink(url: string): void {
       console.log("open", url);
       window.open(url, "_blank");
+    },
+    formatDate(date: Date): string {
+      const options: any = {
+        year: "numeric",
+        month: "numeric",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false
+      };
+      const formatted = new Intl.DateTimeFormat("it-IT", options).format(date);
+      return formatted;
     },
     save(active: boolean, itemIndex: number): void {
       // freeze to avoid conflicts when negating "active"
@@ -147,7 +132,6 @@ export default Vue.extend({
       });
 
       freezed[itemIndex].active = !freezed[itemIndex].active;
-      console.log(freezed);
 
       savePreferences(freezed);
     }
