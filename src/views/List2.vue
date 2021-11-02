@@ -55,7 +55,18 @@
                   last push: {{ formatDate(new Date(repo.pushed_at)) }}
                 </v-list-item-subtitle>
                 <v-list-item-icon>
-                  <v-icon v-text="repo.icon"></v-icon>
+                  <v-icon
+                    v-text="'mdi-github'"
+                    color="primary lighten-3"
+                    @click="openLink(repo.html_url, false)"
+                  ></v-icon>
+                </v-list-item-icon>
+                <v-list-item-icon>
+                  <v-icon
+                    v-text="'mdi-microsoft-visual-studio-code'"
+                    color="primary lighten-3"
+                    @click="openLink(repo.html_url, true)"
+                  ></v-icon>
                 </v-list-item-icon>
               </v-list-item>
             </v-list-group>
@@ -97,8 +108,11 @@ export default Vue.extend({
     items: [] as item[]
   }),
   methods: {
-    openLink(url: string): void {
+    openLink(url: string, code: boolean): void {
       console.log("open", url);
+      if (code) {
+        url = url.replace(".com", ".dev");
+      }
       window.open(url, "_blank");
     },
     formatDate(date: Date): string {
