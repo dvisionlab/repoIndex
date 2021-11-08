@@ -3,6 +3,7 @@ export interface repository {
   name: string;
   icon: string;
   group: string;
+  tag: string;
 }
 
 export interface item {

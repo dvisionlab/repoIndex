@@ -68,17 +68,28 @@ export async function getGroupedRepos() {
 
   const repos: repository[] = response.data.map((repo: any): repository => {
     // TODO here...
-    // - group projects based on topics (repo.topics is the array of topics in the repository 'about' section), ie "customer-project", "closed", ecc
     // - set a proper icon for each repo
 
     repo.icon = "mdi-open-in-new";
-    repo.group = repo.private ? "Private Projects" : "Open Source Libraries";
+    // repo.group = repo.private ? "Private Projects" : "Open Source Libraries";
+
+    if (repo.archived) {
+      repo.tag = "archived";
+    } else if (repo.fork) {
+      repo.tag = "forked";
+    } else if (!repo.private) {
+      repo.tag = "open-source";
+    } else {
+      repo.tag = repo.topics[0];
+    }
+
     return repo;
   });
 
   // lodash-free version of groupBy
   const grouped = repos.reduce(
-    (r, v, i, a, k = v.group) => ((r[k] || (r[k] = [])).push(v), r),
+    // (r, v, i, a, k = v.group) => ((r[k] || (r[k] = [])).push(v), r),
+    (r, v, i, a, k = v.tag) => ((r[k] || (r[k] = [])).push(v), r),
     {}
   );
   console.log("grouped", grouped);
