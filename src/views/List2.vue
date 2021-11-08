@@ -41,13 +41,10 @@
                 </v-list-item-content>
               </template>
 
-              <v-list-item
-                v-for="(repo, i) in item.repos"
-                :key="i"
-                link
+              <!-- link
                 :href="repo.html_url"
-                target="_blank"
-              >
+                target="_blank" -->
+              <v-list-item v-for="(repo, i) in item.repos" :key="i">
                 <v-list-item-title class="text-overline">{{
                   repo.name
                 }}</v-list-item-title>
